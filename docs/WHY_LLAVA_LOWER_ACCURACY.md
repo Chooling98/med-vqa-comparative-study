@@ -261,46 +261,6 @@ LLaVA (zero-shot):          47.92%
 
 ---
 
-## 💡 你在报告中应该这样解释
-
-### ✅ Discussion 部分：
-
-```markdown
-### 4.2 Model Performance Comparison
-
-Our results show that the task-specific CNN-LSTM model (58.33% accuracy)
-outperforms the general-purpose LLaVA-1.5 model (47.92% accuracy) on
-closed-ended yes/no questions. This 10.41% performance gap is consistent
-with findings from prior work in medical VQA [citations] and can be
-attributed to several factors:
-
-1. **Domain Adaptation**: The CNN-LSTM model was trained specifically on
-   the VQA-RAD dataset, allowing it to learn dataset-specific image
-   features and question patterns. In contrast, LLaVA-1.5 was trained
-   primarily on natural images and is being evaluated zero-shot on
-   medical images.
-
-2. **Task Specificity**: The CNN-LSTM is a discriminative classifier
-   optimized for binary yes/no classification, while LLaVA is a
-   generative model that produces free-form text requiring post-processing
-   to extract yes/no answers.
-
-3. **Medical Image Expertise**: Medical imaging (CT, MRI, X-ray) requires
-   specialized knowledge that general vision-language models lack without
-   fine-tuning on medical data.
-
-However, LLaVA demonstrates important advantages:
-- Flexibility to handle open-ended questions (Section 5.3)
-- No training required on task-specific data
-- Ability to provide explanatory text alongside answers
-- Potential for clinical reasoning through chain-of-thought
-
-These results highlight the trade-off between task-specific optimization
-and generalization capability in medical AI systems.
-```
-
----
-
 ## 🎯 总结
 
 ### LLaVA 准确率低是因为：
