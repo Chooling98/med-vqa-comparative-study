@@ -10,10 +10,10 @@
 
 This project investigates the performance gap between domain-specific and general-purpose models in medical imaging tasks. Our findings demonstrate that:
 
-- **CNN-LSTM (task-specific)**: 62.50% accuracy (150/240)
+- **CNN-LSTM (task-specific)**: 58.33% accuracy (140/240)
 - **LLaVA-1.5 (zero-shot)**: 47.92% accuracy (115/240)
 
-The 14.58% performance gap highlights the importance of domain adaptation for medical VQA tasks.
+The 10.41 percentage points performance gap highlights the importance of domain adaptation for medical VQA tasks.
 
 ## 🎯 Key Findings
 
@@ -31,8 +31,8 @@ The 14.58% performance gap highlights the importance of domain adaptation for me
 
 | Model | Accuracy | Precision | Recall | F1-Score |
 |-------|----------|-----------|--------|----------|
-| CNN-LSTM | 62.50% | 0.625 | 0.625 | 0.625 |
-| LLaVA-1.5 | 47.92% | 0.479 | 0.479 | 0.479 |
+| CNN-LSTM | 58.33% | 0.665 | 0.583 | 0.662 |
+| LLaVA-1.5 | 47.92% | 0.542 | 0.479 | 0.508 |
 
 ### Performance by Question Type
 
@@ -88,6 +88,46 @@ This project uses the **VQA-RAD** dataset:
    └── VQA_RAD Image Folder/
    ```
 
+## 🏗️ Model Architecture
+
+### CNN-LSTM Configuration
+
+```python
+# Image Encoder
+- Base Model: ResNet-50 (pretrained on ImageNet)
+- Output Dimension: 2048
+- Frozen: Yes (transfer learning)
+
+# Question Encoder
+- Embedding Dimension: 100
+- LSTM Hidden Dimension: 256
+- Vocabulary Size: 786 tokens
+
+# Multimodal Fusion
+- Concatenation: [2048-dim image + 256-dim question] = 2304-dim
+- Classifier: Linear(2304 → 2) for binary classification
+- Total Trainable Parameters: ~14M
+```
+
+### Training Configuration
+
+```python
+- Optimizer: Adam (lr=0.001)
+- Loss Function: CrossEntropyLoss
+- Batch Size: 16
+- Epochs: 5
+- Training Time: ~2 minutes (GPU)
+```
+
+### LLaVA-1.5 Configuration
+
+```python
+- Vision Encoder: CLIP ViT-L/14 (224×224 input)
+- Language Model: Vicuna-7B (fine-tuned LLaMA)
+- Total Parameters: ~7 Billion
+- Evaluation Mode: Zero-shot (no fine-tuning on VQA-RAD)
+```
+
 ## 🔬 Usage
 
 ### Run Full Experiment
@@ -113,7 +153,7 @@ from src.model import CNNLSTM
 from src.dataset import VQARADDataset
 
 # Load model
-model = CNNLSTM(vocab_size=..., embed_dim=256, hidden_dim=512, num_answers=...)
+model = CNNLSTM(vocab_size=..., embed_dim=100, hidden_dim=256, num_answers=2)
 
 # Inference
 # See notebooks/sanity_check.ipynb Section 8-10
