@@ -92,41 +92,35 @@ This project uses the **VQA-RAD** dataset:
 
 ### CNN-LSTM Configuration
 
-```python
-# Image Encoder
+**Image Encoder:**
 - Base Model: ResNet-50 (pretrained on ImageNet)
-- Output Dimension: 2048
-- Frozen: Yes (transfer learning)
+- Output Features: 2048-dimensional
+- Parameters: Frozen for transfer learning
 
-# Question Encoder
-- Embedding Dimension: 100
+**Question Encoder:**
+- Word Embedding Dimension: 100
 - LSTM Hidden Dimension: 256
-- Vocabulary Size: 786 tokens
+- Vocabulary Size: 786 tokens (minimum frequency = 2)
 
-# Multimodal Fusion
-- Concatenation: [2048-dim image + 256-dim question] = 2304-dim
-- Classifier: Linear(2304 → 2) for binary classification
+**Multimodal Fusion:**
+- Feature Concatenation: [2048-dim image + 256-dim question] → 2304-dim
+- Classifier: Fully connected layer (2304 → 2 classes)
 - Total Trainable Parameters: ~14M
-```
 
-### Training Configuration
-
-```python
-- Optimizer: Adam (lr=0.001)
+**Training Configuration:**
+- Optimizer: Adam (learning rate = 0.001)
 - Loss Function: CrossEntropyLoss
 - Batch Size: 16
 - Epochs: 5
-- Training Time: ~2 minutes (GPU)
-```
+- Training Time: ~2 minutes on GPU
 
 ### LLaVA-1.5 Configuration
 
-```python
-- Vision Encoder: CLIP ViT-L/14 (224×224 input)
-- Language Model: Vicuna-7B (fine-tuned LLaMA)
-- Total Parameters: ~7 Billion
-- Evaluation Mode: Zero-shot (no fine-tuning on VQA-RAD)
-```
+- **Vision Encoder**: CLIP ViT-L/14 (processes 224×224 images)
+- **Language Model**: Vicuna-7B (fine-tuned LLaMA)
+- **Projection Module**: Learnable linear layer for vision-language alignment
+- **Total Parameters**: ~7 Billion
+- **Evaluation**: Zero-shot (no fine-tuning on VQA-RAD)
 
 ## 🔬 Usage
 
